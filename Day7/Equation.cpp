@@ -7,7 +7,7 @@ Equation::Equation(const std::vector<unsigned long int>& equation)
 
 bool Equation::isSolvable()  const
 {
-    std::cout << _solution << ":";
+    // std::cout << _solution << ":" << std::endl;
     return tryCalculation(0, _terms.begin());
 }
 
@@ -15,6 +15,7 @@ bool Equation::tryCalculation(unsigned long int calculationResult, std::vector<u
 {
     if(termIter == _terms.end())
     {
+        // std::cout << calculationResult <<std::endl;
         return calculationResult == _solution;
     }    
 
@@ -26,15 +27,16 @@ bool Equation::tryCalculation(unsigned long int calculationResult, std::vector<u
     {  
         return true;
     }
-    // else if (tryMerge(calculationResult, termIter))
-    // {
-    //     return true;
-    // }
+    else if (tryMerge(calculationResult, termIter))
+    {
+        return true;
+    }
     return false;
 }
 
 bool Equation::trySum(unsigned long int calculationResult, unsigned long int term, std::vector<unsigned long int>::const_iterator termIter) const
 {   
+    // std::cout << calculationResult << " + " << term << std::endl;
     return tryCalculation(calculationResult + term, termIter+1);
 }
 bool Equation::tryMultiply(unsigned long int calculationResult, unsigned long int term, std::vector<unsigned long int>::const_iterator termIter) const
@@ -43,6 +45,7 @@ bool Equation::tryMultiply(unsigned long int calculationResult, unsigned long in
     {
         return false;
     }
+    // std::cout << calculationResult << " * " << term << std::endl;
     return tryCalculation(calculationResult * term, termIter+1);
 }
 
@@ -52,6 +55,8 @@ bool Equation::tryMerge(unsigned long int calculationResult, std::vector<unsigne
     {
         return false;
     }
+
+    // std::cout << *termIter << " * " << *termIter + 1 << std::endl;
 
     unsigned long int combinedValue = std::stoi(std::to_string(*termIter) + std::to_string(*(termIter + 1)));
 

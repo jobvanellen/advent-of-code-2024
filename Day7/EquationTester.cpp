@@ -19,12 +19,12 @@ unsigned long int EquationTester::getCalibrationResult(const Equation& equation)
 {   
     if(equation.isSolvable())
     {
-        std::cout << " OK!" << std::endl;
+        // std::cout << " OK!" << std::endl;
         return equation.solution();
     }
-    else
-    {
-        std::cout << "NOK" << std::endl;
-    }
+    // else
+    // {
+    //     std::cout << "NOK" << std::endl;
+    // }
     return 0;
 }
