@@ -1,5 +1,4 @@
 #include "Equation.hpp"
-#include <iostream>
 
 Equation::Equation(const std::vector<unsigned long int>& equation)
 : _solution(equation.at(0)), _terms(equation.begin()+1, equation.end())
@@ -7,68 +6,46 @@ Equation::Equation(const std::vector<unsigned long int>& equation)
 
 bool Equation::isSolvable()  const
 {
-    // std::cout << _solution << ":" << std::endl;
-    return tryCalculation(0, _terms.begin());
+    return tryCalculation(_terms.at(0), _terms.begin());
 }
 
-bool Equation::tryCalculation(unsigned long int calculationResult, std::vector<unsigned long int>::const_iterator termIter) const
-{
-    if(termIter == _terms.end())
-    {
-        // std::cout << calculationResult <<std::endl;
-        return calculationResult == _solution;
-    }    
-
-    if(trySum(calculationResult, *termIter, termIter))
-    {
-        return true;
-    }
-    if(tryMultiply(calculationResult, *termIter, termIter))
-    {  
-        return true;
-    }
-    else if (tryMerge(calculationResult, termIter))
-    {
-        return true;
-    }
-    return false;
-}
-
-bool Equation::trySum(unsigned long int calculationResult, unsigned long int term, std::vector<unsigned long int>::const_iterator termIter) const
-{   
-    // std::cout << calculationResult << " + " << term << std::endl;
-    return tryCalculation(calculationResult + term, termIter+1);
-}
-bool Equation::tryMultiply(unsigned long int calculationResult, unsigned long int term, std::vector<unsigned long int>::const_iterator termIter) const
-{
-    if(termIter == _terms.begin())
-    {
-        return false;
-    }
-    // std::cout << calculationResult << " * " << term << std::endl;
-    return tryCalculation(calculationResult * term, termIter+1);
-}
-
-bool Equation::tryMerge(unsigned long int calculationResult, std::vector<unsigned long int>::const_iterator termIter) const
+bool Equation::tryCalculation(unsigned long int calculationResult, std::vector<int>::const_iterator termIter) const
 {
     if(termIter + 1 == _terms.end())
     {
-        return false;
-    }
+        return calculationResult == _solution;
+    }    
 
-    // std::cout << *termIter << " * " << *termIter + 1 << std::endl;
-
-    unsigned long int combinedValue = std::stoi(std::to_string(*termIter) + std::to_string(*(termIter + 1)));
-
-    if(trySum(calculationResult, combinedValue, termIter+1))
+    if(trySum(calculationResult, termIter + 1))
     {
         return true;
     }
-    if(tryMultiply(calculationResult, combinedValue, termIter+1))
+    if(tryMultiply(calculationResult, termIter + 1))
     {  
         return true;
     }
+    else if (tryConcatenate(calculationResult, termIter + 1))
+    {
+        return true;
+    }
     return false;
+}
+
+bool Equation::trySum(unsigned long int calculationResult, std::vector<int>::const_iterator termIter) const
+{       
+    unsigned long int sum = calculationResult + *termIter;
+    return tryCalculation(sum, termIter);
+}
+bool Equation::tryMultiply(unsigned long int calculationResult, std::vector<int>::const_iterator termIter) const
+{
+    unsigned long int product = calculationResult * *termIter;
+    return tryCalculation(product, termIter);
+}
+
+bool Equation::tryConcatenate(unsigned long int calculationResult, std::vector<int>::const_iterator termIter) const
+{
+    unsigned long int combinedValue = std::stol(std::to_string(calculationResult) + std::to_string(*termIter));
+    return tryCalculation(combinedValue, termIter);
 }
 
 unsigned long int Equation::solution() const

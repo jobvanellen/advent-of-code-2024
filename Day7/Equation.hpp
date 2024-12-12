@@ -12,14 +12,14 @@ class Equation
     static void createEquations(const std::vector<std::vector<unsigned long int>>& equationInput, std::vector<Equation>& equationOutput);
 
     private:
-    bool tryCalculation(unsigned long int calculationResult, std::vector<unsigned long int>::const_iterator termIter) const;
+    bool tryCalculation(unsigned long int calculationResult, std::vector<int>::const_iterator termIter) const;
 
-    bool trySum(unsigned long int currentResult, unsigned long int term, std::vector<unsigned long int>::const_iterator termIter) const;
-    bool tryMultiply(unsigned long int currentResult, unsigned long int term, std::vector<unsigned long int>::const_iterator termIter) const;
-    bool tryMerge(unsigned long int currentResult, std::vector<unsigned long int>::const_iterator termIter) const;
+    bool trySum(unsigned long int currentResult, std::vector<int>::const_iterator termIter) const;
+    bool tryMultiply(unsigned long int currentResult, std::vector<int>::const_iterator termIter) const;
+    bool tryConcatenate(unsigned long int currentResult, std::vector<int>::const_iterator termIter) const;
 
     const unsigned long int _solution;
-    const std::vector<unsigned long int> _terms;
+    const std::vector<int> _terms;
     
 
 };
