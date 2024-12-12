@@ -2,7 +2,7 @@
 
 const std::string FileParser::path = "../../Day7/files/";
 
-void FileParser::parseEquationFile(const std::string& equationFile, std::vector<std::vector<int>>& equations)
+void FileParser::parseEquationFile(const std::string& equationFile, std::vector<std::vector<unsigned long int>>& equations)
 {
     if(std::ifstream ifs = loadFile(path + equationFile))
     {
@@ -13,27 +13,27 @@ void FileParser::parseEquationFile(const std::string& equationFile, std::vector<
         }
     }
 
-    std::cout << "Parsed equations: " << std::endl;
-    for(const auto& equation : equations )
-    {   
-        std::string separator = ": ";
-        for(int number : equation)
-        {
-            std::cout << number << separator;
-            separator = " ";
-        }
-        std::cout << std::endl;
-    }
+//     std::cout << "Parsed equations: " << std::endl;
+//     for(const auto& equation : equations )
+//     {   
+//         std::string separator = ": ";
+//         for(unsigned long int number : equation)
+//         {
+//             std::cout << number << separator;
+//             separator = " ";
+//         }
+//         std::cout << std::endl;
+//     }
 }
 
-std::vector<int> FileParser::parseEquation(const std::string& line)
+std::vector<unsigned long int> FileParser::parseEquation(const std::string& line)
 {
     std::istringstream iss(line);
-    std::vector<int> result;
+    std::vector<unsigned long int> result;
 
     while(!iss.eof() && !iss.bad())
     {
-        int n;
+        unsigned long int n;
         iss >> n;
  
         if (iss.fail())

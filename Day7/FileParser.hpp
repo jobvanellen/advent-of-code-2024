@@ -11,10 +11,10 @@ class FileParser
 {
     public:
         FileParser() = delete;
-        static void parseEquationFile(const std::string& equationFile, std::vector<std::vector<int>>& equations);
+        static void parseEquationFile(const std::string& equationFile, std::vector<std::vector<unsigned long int>>& equations);
 
     private:
-        static std::vector<int> parseEquation(const std::string& line);
+        static std::vector<unsigned long int> parseEquation(const std::string& line);
         static std::ifstream loadFile(const std::string& filename);
 
         static const std::string path;
