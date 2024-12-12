@@ -20,7 +20,7 @@ bool Equation::tryCalculation(unsigned long int calculationResult, std::vector<i
     {
         return true;
     }
-    if(tryMultiply(calculationResult, termIter + 1))
+    else if(tryMultiply(calculationResult, termIter + 1))
     {  
         return true;
     }
