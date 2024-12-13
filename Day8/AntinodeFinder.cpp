@@ -1,4 +1,6 @@
 #include "AntinodeFinder.hpp"
+#include <iostream>
+#include <ranges>
 
 AntinodeFinder::AntinodeFinder(const std::map<char, std::vector<std::pair<int, int>>>& antennaLocations, int maxRow, int maxColumn)
 : _antennaLocations(antennaLocations), _maxRow(maxRow), _maxColumn(maxColumn)
@@ -7,11 +9,19 @@ AntinodeFinder::AntinodeFinder(const std::map<char, std::vector<std::pair<int, i
 int AntinodeFinder::countAntiNodes() const
 {
     std::set<std::pair<int,int>> antinodes;
+    
+    findAllAntiNodes(antinodes);
+    printAntiNodes(antinodes);
+
+    return antinodes.size();
+}
+
+void AntinodeFinder::findAllAntiNodes(std::set<std::pair<int,int>>& antinodes) const
+{
     for(auto it = _antennaLocations.begin(); it != _antennaLocations.end(); it++)
     {
         findAntinodesForAntennaType(it->second, antinodes);
     }
-    return antinodes.size();
 }
 
 void AntinodeFinder::findAntinodesForAntennaType(const std::vector<std::pair<int, int>>& antennas, std::set<std::pair<int,int>>& antinodes) const
@@ -20,21 +30,27 @@ void AntinodeFinder::findAntinodesForAntennaType(const std::vector<std::pair<int
     {
         for(const auto& otherAntenna : antennas)
         {
-            const std::pair<int,int> antinode = findAntinodeForAntennas(antenna, otherAntenna);
-
-            if(!outOfBounds(antinode))
+            if(antenna != otherAntenna)
             {
-                antinodes.insert(antinode);
-            }
+                findAntinodesForAntennas(antenna, otherAntenna, antinodes);
+            }            
         }
     }
 }
 
-std::pair<int, int> AntinodeFinder::findAntinodeForAntennas(const std::pair<int,int> antenna, const std::pair<int,int> otherAntenna) const
-{   
-    return antenna == otherAntenna ? NO_ANTINODE : 
-                                     std::make_pair(2 * antenna.first - otherAntenna.first, 2 * antenna.second - otherAntenna.second);
-  
+void AntinodeFinder::findAntinodesForAntennas(const std::pair<int,int> antenna, const std::pair<int,int> otherAntenna, std::set<std::pair<int,int>>& antinodes) const
+{
+    int rowDelta = antenna.first - otherAntenna.first;
+    int columnDelta = antenna.second - otherAntenna.second;
+
+    std::pair<int,int> antinode = antenna;
+
+    while(!outOfBounds(antinode))
+    {
+        antinodes.insert(antinode);
+        antinode.first += rowDelta;
+        antinode.second += columnDelta;
+    }            
 }
 
 bool AntinodeFinder::outOfBounds(const std::pair<int,int>& location) const
@@ -43,4 +59,33 @@ bool AntinodeFinder::outOfBounds(const std::pair<int,int>& location) const
            location.second < 0 ||
            location.first >= _maxRow ||
            location.second >= _maxColumn;
+}
+
+void AntinodeFinder::printAntiNodes(const std::set<std::pair<int,int>>& antinodes) const
+{
+    for(int i = 0; i < _maxRow; i++)
+    {
+        for(int j = 0; j < _maxColumn; j++)
+        {
+           
+            std::cout << getSymbol(antinodes, i,j);
+        }
+        std::cout << std::endl;
+    }
+}
+
+char AntinodeFinder::getSymbol(const std::set<std::pair<int,int>>& antinodes, int row, int column) const
+{
+    char symbol = antinodes.find({row, column}) == antinodes.end() ? '.' : '#';
+    for(const auto& antennaType : _antennaLocations)
+    {
+        for(const auto& antenna : antennaType.second)
+        {
+            if(antenna == std::make_pair(row, column))
+            {
+                symbol = antennaType.first;
+            }
+        }
+    }
+    return symbol;
 }

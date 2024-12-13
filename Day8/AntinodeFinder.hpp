@@ -11,9 +11,13 @@ class AntinodeFinder
     int countAntiNodes() const;
 
     private:
-    void findAntinodesForAntennaType(const std::vector<std::pair<int, int>>& antennas ,std::set<std::pair<int,int>>& antiNodes) const;
-    std::pair<int, int> findAntinodeForAntennas(const std::pair<int,int> antenna, const std::pair<int,int> otherAntenna) const;
+    void findAllAntiNodes(std::set<std::pair<int,int>>& antinodes) const;
+    void findAntinodesForAntennaType(const std::vector<std::pair<int, int>>& antennas, std::set<std::pair<int,int>>& antiNodes) const;
+    void findAntinodesForAntennas(const std::pair<int,int> antenna, const std::pair<int,int> otherAntenna, std::set<std::pair<int,int>>& antinodes) const;
     bool outOfBounds(const std::pair<int,int>& location) const; 
+
+    void printAntiNodes(const std::set<std::pair<int,int>>& antinodes) const;
+    char getSymbol(const std::set<std::pair<int,int>>& antinodes, int row, int column) const;
 
     const std::map<char, std::vector<std::pair<int, int>>>& _antennaLocations;
     const int _maxRow, _maxColumn;
