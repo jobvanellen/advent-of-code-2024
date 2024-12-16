@@ -1,4 +1,5 @@
 #include "FileParser.hpp"
+#include "DiskDefragmenter.hpp"
 
 #include <map>
 #include <set>
@@ -21,36 +22,6 @@ void decompressDiskMap(const std::vector<int> diskmap, std::vector<int>& decompr
         }
         file = ! file;
     }
-}
-
-void rearrangeFiles(const std::vector<int>& decompressed, std::vector<int>& rearranged)
-{
-    rearranged = decompressed;
-
-    auto iter = rearranged.begin();
-    auto riter = rearranged.rbegin();
-
-    while(iter != rearranged.end())
-    {
-        while(*iter != -1 )
-        {
-            iter++;
-        }
-
-        while(*riter == -1 )
-        {
-            riter++;
-        }
-
-        if(iter > riter.base() - 1)
-        {
-            break;
-        }
-
-        *iter = *riter; 
-        *riter = -1;       
-    }
-    
 }
 
 // void rearrangeWholeFiles(const std::vector<int>& decompressed, std::vector<int>& rearranged)
@@ -100,15 +71,12 @@ int main()
     std::vector<int> decompressed;
     decompressDiskMap(diskmap, decompressed);
 
+    DiskDefragmenter defragmenter = DiskDefragmenter(decompressed);
+
     std::vector<int> rearranged;
-    rearrangeFiles(decompressed, rearranged);
-
-    // std::vector<int> rearrangedWhole;
-    // rearrangeWholeFiles(decompressed, rearrangedWhole);
-
+    defragmenter.rearrangeFileFragments(rearranged);
 
     std::cout << "Checksum: " << calculateChecksum(rearranged) << std::endl;
-    // std::cout << "Checksum: " << calculateChecksum(rearrangedWhole) << std::endl; 
 
 
     return 0;

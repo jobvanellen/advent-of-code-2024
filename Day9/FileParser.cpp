@@ -14,13 +14,6 @@ void FileParser::parseDiskmap(const std::string& diskmapFile, std::vector<int>& 
         {
             diskmap.push_back(std::stoi(std::string{c}));
         }
-
-        // for(int n : diskmap)
-        // {
-        //     std::cout << n << " ";
-        // }
-        // std::cout << std::endl;
-
     }
 }
 
