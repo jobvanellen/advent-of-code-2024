@@ -65,8 +65,8 @@ unsigned long int calculateChecksum(const std::vector<int>& rearranged)
 int main()
 {
     std::vector<int> diskmap;
-    FileParser::parseDiskmap("example_diskmap.txt", diskmap);
-    // FileParser::parseDiskmap("diskmap.txt", diskmap);
+    // FileParser::parseDiskmap("example_diskmap.txt", diskmap);
+    FileParser::parseDiskmap("diskmap.txt", diskmap);
 
     std::vector<int> decompressed;
     decompressDiskMap(diskmap, decompressed);

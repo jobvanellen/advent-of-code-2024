@@ -13,15 +13,8 @@ void DiskDefragmenter::rearrangeFileFragments(std::vector<int>& rearranged)
 
     while(iter != rearranged.end())
     {
-        while(*iter != -1 )
-        {
-            iter++;
-        }
-
-        while(*riter == -1 )
-        {
-            riter++;
-        }
+        riter = getFileEnd(riter);
+        iter = getGapBegin(iter);
 
         if(iter > riter.base() - 1)
         {
@@ -31,4 +24,22 @@ void DiskDefragmenter::rearrangeFileFragments(std::vector<int>& rearranged)
         *iter = *riter; 
         *riter = -1;       
     }
+}
+
+std::vector<int>::reverse_iterator DiskDefragmenter::getFileEnd(std::vector<int>::reverse_iterator riter)
+{
+    while(*riter == -1 )
+    {
+        riter++;
+    }
+    return riter;   
+}
+
+std::vector<int>::iterator DiskDefragmenter::getGapBegin(std::vector<int>::iterator iter)
+{
+    while(*iter != -1 )
+    {
+        iter++;
+    }
+    return iter;
 }
