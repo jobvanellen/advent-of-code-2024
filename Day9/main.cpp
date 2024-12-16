@@ -24,30 +24,6 @@ void decompressDiskMap(const std::vector<int> diskmap, std::vector<int>& decompr
     }
 }
 
-// void rearrangeWholeFiles(const std::vector<int>& decompressed, std::vector<int>& rearranged)
-// {
-//     rearranged = decompressed;
-
-//     auto iter = rearranged.begin();
-//     auto riter = rearranged.rbegin();
-
-//     int gapsize = 0;
-//     int filesize = 0;
-
-//     while(*iter != -1 )
-//     {
-//         iter++;
-//         gapsize++;
-//     }
-
-//     // find a file that fits the gap
-//     while(*riter == -1)
-//     {
-//         riter++;
-//         filesize++;
-//     }
-// }
-
 unsigned long int calculateChecksum(const std::vector<int>& rearranged)
 {
     unsigned long int sum = 0;
@@ -55,7 +31,7 @@ unsigned long int calculateChecksum(const std::vector<int>& rearranged)
     {
         if(rearranged.at(i) == -1)
         {
-            break;
+            continue;
         }
         sum += i * rearranged.at(i);
     }
@@ -77,6 +53,14 @@ int main()
     defragmenter.rearrangeFileFragments(rearranged);
 
     std::cout << "Checksum: " << calculateChecksum(rearranged) << std::endl;
+
+    defragmenter.createMemoryBlocks(diskmap);
+    std::vector<int> rearrangedWhole;
+
+    defragmenter.rearrangeWholeFiles(rearrangedWhole);
+
+    std::cout <<"Checksum: " << calculateChecksum(rearrangedWhole) << std::endl;
+
 
 
     return 0;
