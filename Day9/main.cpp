@@ -37,7 +37,10 @@ void rearrangeFiles(const std::vector<int>& decompressed, std::vector<int>& rear
             iter++;
         }
 
-
+        while(*riter == -1 )
+        {
+            riter++;
+        }
 
         if(iter > riter.base() - 1)
         {
@@ -50,29 +53,29 @@ void rearrangeFiles(const std::vector<int>& decompressed, std::vector<int>& rear
     
 }
 
-void rearrangeWholeFiles(const std::vector<int>& decompressed, std::vector<int>& rearranged)
-{
-    rearranged = decompressed;
+// void rearrangeWholeFiles(const std::vector<int>& decompressed, std::vector<int>& rearranged)
+// {
+//     rearranged = decompressed;
 
-    auto iter = rearranged.begin();
-    auto riter = rearranged.rbegin();
+//     auto iter = rearranged.begin();
+//     auto riter = rearranged.rbegin();
 
-    int gapsize = 0;
-    int filesize = 0;
+//     int gapsize = 0;
+//     int filesize = 0;
 
-    while(*iter != -1 )
-    {
-        iter++;
-        gapsize++;
-    }
+//     while(*iter != -1 )
+//     {
+//         iter++;
+//         gapsize++;
+//     }
 
-    // find a file that fits the gap
-    while(*riter == -1)
-    {
-        riter++;
-        filesize++;
-    }
-}
+//     // find a file that fits the gap
+//     while(*riter == -1)
+//     {
+//         riter++;
+//         filesize++;
+//     }
+// }
 
 unsigned long int calculateChecksum(const std::vector<int>& rearranged)
 {
@@ -100,12 +103,12 @@ int main()
     std::vector<int> rearranged;
     rearrangeFiles(decompressed, rearranged);
 
-    std::vector<int> rearrangedWhole;
-    rearrangeWholeFiles(decompressed, rearrangedWhole);
+    // std::vector<int> rearrangedWhole;
+    // rearrangeWholeFiles(decompressed, rearrangedWhole);
 
 
     std::cout << "Checksum: " << calculateChecksum(rearranged) << std::endl;
-    std::cout << "Checksum: " << calculateChecksum(rearrangedWhole) << std::endl; 
+    // std::cout << "Checksum: " << calculateChecksum(rearrangedWhole) << std::endl; 
 
 
     return 0;
