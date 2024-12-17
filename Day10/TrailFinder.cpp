@@ -7,7 +7,7 @@ std::pair<T,U> operator+(const std::pair<T,U> & l,const std::pair<T,U> & r) {
     return {l.first+r.first,l.second+r.second};                                    
 } 
 
-TrailFinder::TrailFinder(const std::vector<std::vector<int>>& map, const std::vector<Trailhead> trailheads)
+TrailFinder::TrailFinder(const std::vector<std::vector<int>>& map, const std::vector<Node> trailheads)
 : _map(map), _trailheads(trailheads)
 {}
 
@@ -73,7 +73,7 @@ bool TrailFinder::withinBounds(std::pair<int,int> location)
 
 TrailFinder TrailFinder::createTrailFinder(const std::vector<std::vector<int>>& map)
 {
-    std::vector<Trailhead> trailHeads;
+    std::vector<Node> trailHeads;
     for (int i = 0; i < map.size(); i++)
     {
         for(int j = 0; j < map.at(i).size(); j++)
@@ -81,7 +81,7 @@ TrailFinder TrailFinder::createTrailFinder(const std::vector<std::vector<int>>& 
             int value = map.at(i).at(j);
             if(value == 0)
             {
-                trailHeads.emplace_back(Trailhead(value, i, j));
+                trailHeads.emplace_back(Node(value, i, j));
             }
         }
     }

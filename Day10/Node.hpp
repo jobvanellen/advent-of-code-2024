@@ -11,7 +11,6 @@ class Node
     Node(int value, std::pair<int,int> location);
     int value() const;
     std::pair<int,int> location() const;
-    bool isTrailHead();
     void addNextNode(Node node);
     
     std::vector<Node>& getNextNodes();
@@ -21,16 +20,4 @@ class Node
     const int _row;
     const int _column;
     std::vector<Node> _nextNodes;
-};
-
-class Trailhead : public Node
-{
-    public:
-    Trailhead(int value, int row, int column);
-    void addPeak(Node node);
-    bool isTrailHead();
-    int countPeaks() const;
-
-    private:
-    std::set<std::pair<int,int>> _peakLocations;
 };
