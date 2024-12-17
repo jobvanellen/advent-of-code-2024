@@ -1,13 +1,13 @@
 #include "FileParser.hpp"
-// #include "Stone.hpp"
 
-
-#include <list>
+#include <map>
+#include <vector>
+#include <numeric>
 #include <iostream>
 
-bool twoDigits(std::list<unsigned long int>::iterator stone)
+bool twoDigits(unsigned long int value)
 {
-    return (std::to_string(*stone).size() % 2) == 0;
+    return ((std::to_string(value)).size() % 2) == 0;
 }
 
 unsigned long int splitStone(unsigned long int& value)
@@ -19,65 +19,71 @@ unsigned long int splitStone(unsigned long int& value)
     return stone1;
 }
 
-void applyRule(std::list<unsigned long int>& stones, std::list<unsigned long int>::iterator stone)
+std::map<unsigned long int, unsigned long int> applyRule(const std::map<unsigned long int, unsigned long int>& stones, std::map<unsigned long int, unsigned long int>::iterator stoneType) 
 {
-    if(*stone == 0)
-    {
-        *stone = 1;
+    unsigned long int key = stoneType->first;
+    unsigned long int amount = stoneType->second;
+    auto newMap = stones;
+    if(key == 0)
+    {  
+        newMap[key] -= amount;
+        newMap[1] += amount;
     }
-    else if(twoDigits(stone))
+    else if(twoDigits(key))
     {
-        stones.insert(stone, splitStone(*stone));
+        newMap[key] -= amount;
+        auto newKey = splitStone(key);
+        newMap[key] += amount;
+        newMap[newKey] += amount;
     }
     else
     {
-        *stone *= 2024;
+        newMap[key] -= amount;
+        newMap[key*2024] += amount;
     }
-       
+    return newMap;
 }
 
-void blink(std::list<unsigned long int>& stones)
+void blink(std::map<unsigned long int, unsigned long int>& stones)
 {
+    std::map<unsigned long int, unsigned long int> newMap;
     for(auto stone = stones.begin(); stone != stones.end(); stone++)
     {
-        applyRule(stones, stone);
+        newMap = applyRule(stones, stone);
     }
+    stones = newMap;
 }
 
-void printStones(const std::list<unsigned long int>& stones)
+void printStones(const std::map<unsigned long int, unsigned long int>& stones)
 {
     for(const auto& stone : stones)
     {
-        std::cout << stone << " ";
+        std::cout << stone.first << "," << stone.second << "|";
     }
     std::cout << std::endl;
 }
 
-std::list<int> splitList(std::list<int>& lst1)
-{
-    std::list<int> lst2;
-    lst2.splice( lst2.begin(), 
-                 lst1, 
-                 lst1.begin(), 
-                 std::next( lst1.begin(), lst1.size() / 2 ) );
-    return lst2;
-}
-
 int main()
 {
-    std::list<unsigned long int> stones;
+    std::vector<unsigned long int> stoneVector;
+    std::map<unsigned long int, unsigned long int> stones;
+    FileParser::parseFile("example_stones.txt", stoneVector);    
+    // FileParser::parseFile("stones.txt", stoneVector);
 
-    // FileParser::parseFile("example_stones.txt", stones);    
-    FileParser::parseFile("stones.txt", stones);
+    for(auto i : stoneVector)
+    {
+        stones[i] += 1;
+    }  
 
-    for(int i = 0; i < 25; i++)
+    for(int i = 0; i < 6; i++)
     {
         blink(stones);
-        // printStones(stones);
+        printStones(stones);
     }
-    std::list<unsigned long int> stones2;
 
-    std::cout << stones.size() << std::endl;
+    unsigned long int count = std::accumulate(stones.begin(), stones.end(), 0, [](const unsigned long int previous, const auto& element)
+                { return previous + element.second; });
+    std::cout << count << std::endl;
 
     return 0;
 }

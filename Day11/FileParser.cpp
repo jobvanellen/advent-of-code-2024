@@ -3,7 +3,7 @@
 
 const std::string FileParser::path = "../../Day11/files/";
 
-void FileParser::parseFile(const std::string& file, std::list<unsigned long int>& output)
+void FileParser::parseFile(const std::string& file, std::vector<unsigned long int>& output)
 {
     if(std::ifstream ifs = loadFile(path + file))
     {
@@ -20,11 +20,11 @@ void FileParser::parseFile(const std::string& file, std::list<unsigned long int>
         }
     }
 
-    // for( int i : output)
-    // {
-    //     std::cout << i << " ";
-    // }
-    //     std::cout << std::endl;
+    for( int i : output)
+    {
+        std::cout << i << " ";
+    }
+        std::cout << std::endl;
 }
 
 
