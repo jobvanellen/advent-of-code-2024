@@ -4,6 +4,10 @@ Node::Node(int value, int row, int column)
 : _value(value), _row(row), _column(column)
 {}
 
+Node::Node(int value, std::pair<int,int> location)
+: _value(value), _row(location.first), _column(location.second)
+{}
+
 
 int Node::value() const
 {
@@ -20,6 +24,10 @@ bool Node::isTrailHead()
     return false;
 }
 
+void Node::addNextNode(Node node)
+{
+    _nextNodes.push_back(node);
+}
 
 Trailhead::Trailhead(int value, int row, int column)
 : Node(value, row, column)
