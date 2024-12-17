@@ -9,7 +9,40 @@ std::pair<T,U> operator+(const std::pair<T,U> & l,const std::pair<T,U> & r) {
 
 TrailFinder::TrailFinder(const std::vector<std::vector<int>>& map, const std::vector<Node> trailheads)
 : _map(map), _trailheads(trailheads)
-{}
+{
+    for(auto& trailhead : _trailheads)
+    {
+        addNextNodes(trailhead);
+    }
+}
+
+void TrailFinder::addNextNodes(Node& node)
+{
+    if(node.value() == 9)
+    {
+        return;
+    }
+
+    auto currentLocation = node.location();
+    
+    for(auto direction : DIRECTIONS)
+    {
+        auto nextLocation = currentLocation + direction;
+        if(withinBounds(nextLocation))
+        {
+            int value = _map.at(nextLocation.first).at(nextLocation.second);
+            if(value - node.value() == 1)
+            {
+                node.addNextNode(Node(value, nextLocation));
+            }
+        }
+    }
+
+    for(auto& nextNode : node.getNextNodes())
+    {
+        addNextNodes(nextNode);
+    }
+}
 
 
 std::vector<int> TrailFinder::getTrailheadScores()
@@ -35,33 +68,14 @@ std::set<std::pair<int,int>> TrailFinder::findPaths(Node& node)
         return peakLocations;
     }
 
-    addNextNodes(node);
-
     for(auto& node : node.getNextNodes())
     {
         peakLocations.merge(findPaths(node));
     }
     return peakLocations;
-    
 }
 
-void TrailFinder::addNextNodes(Node& node)
-{
-    auto currentLocation = node.location();
-    
-    for(auto direction : DIRECTIONS)
-    {
-        auto nextLocation = currentLocation + direction;
-        if(withinBounds(nextLocation))
-        {
-            int value = _map.at(nextLocation.first).at(nextLocation.second);
-            if(value - node.value() == 1)
-            {
-                node.addNextNode(Node(value, nextLocation));
-            }
-        }
-    }
-}
+
 
 bool TrailFinder::withinBounds(std::pair<int,int> location)
 {
