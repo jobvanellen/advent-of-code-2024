@@ -18,14 +18,14 @@ void FileParser::parseMap(const std::string& mapFile, std::vector<std::vector<in
             map.push_back(mapRow);
         }
     }
-    for(const auto& mapRow : map)
-    {
-        for( int i : mapRow)
-        {
-            std::cout << i;
-        }
-        std::cout << std::endl;
-    }
+    // for(const auto& mapRow : map)
+    // {
+    //     for( int i : mapRow)
+    //     {
+    //         std::cout << i;
+    //     }
+    //     std::cout << std::endl;
+    // }
 }
 
 

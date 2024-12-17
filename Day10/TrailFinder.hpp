@@ -11,12 +11,15 @@ class TrailFinder
     TrailFinder(const std::vector<std::vector<int>>& map, const std::vector<Trailhead> trailheads);
 
     std::vector<int> getTrailheadScores();
-    void addNextNodes(Node& node);
+
+
 
     static TrailFinder createTrailFinder(const std::vector<std::vector<int>>& map);
 
     private:
 
+    std::set<std::pair<int,int>> findPaths(Node& node);
+    void addNextNodes(Node& node);
     bool withinBounds(std::pair<int,int> location);
 
     const std::vector<std::vector<int>>& _map;

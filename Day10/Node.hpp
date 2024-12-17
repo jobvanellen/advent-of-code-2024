@@ -13,7 +13,9 @@ class Node
     std::pair<int,int> location() const;
     bool isTrailHead();
     void addNextNode(Node node);
-
+    
+    std::vector<Node>& getNextNodes();
+    
     private:
     const int _value;
     const int _row;

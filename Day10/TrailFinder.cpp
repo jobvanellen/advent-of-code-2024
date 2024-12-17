@@ -17,11 +17,32 @@ std::vector<int> TrailFinder::getTrailheadScores()
     std::vector<int> scores;
     for(auto& trailhead : _trailheads)
     {
-        addNextNodes(trailhead);
-        
+        std::set<std::pair<int,int>> peakLocations;
+        peakLocations.merge(findPaths(trailhead));
+        scores.push_back(peakLocations.size());
+    }
+    
+    return scores;
+}
+
+std::set<std::pair<int,int>> TrailFinder::findPaths(Node& node)
+{
+    std::set<std::pair<int,int>> peakLocations;
+
+    if(node.value() == 9)
+    {
+        peakLocations.insert(node.location());
+        return peakLocations;
     }
 
-    return scores;
+    addNextNodes(node);
+
+    for(auto& node : node.getNextNodes())
+    {
+        peakLocations.merge(findPaths(node));
+    }
+    return peakLocations;
+    
 }
 
 void TrailFinder::addNextNodes(Node& node)

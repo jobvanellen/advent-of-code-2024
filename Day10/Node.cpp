@@ -29,6 +29,11 @@ void Node::addNextNode(Node node)
     _nextNodes.push_back(node);
 }
 
+std::vector<Node>& Node::getNextNodes()
+{
+    return _nextNodes;
+}
+
 Trailhead::Trailhead(int value, int row, int column)
 : Node(value, row, column)
 {}
