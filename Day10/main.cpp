@@ -19,6 +19,11 @@ int main()
 
     int scoreSum = std::accumulate(scores.begin(), scores.end(), 0);
     std::cout << scoreSum << std::endl;
+    
+
+    std::vector<int> ratings = trailFinder.getTrailheadRatings();
+    int ratingSum = std::accumulate(ratings.begin(), ratings.end(), 0);
+    std::cout << ratingSum << std::endl;
 
     return 0;
 }
