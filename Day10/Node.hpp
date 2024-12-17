@@ -9,11 +9,12 @@ class Node
     public:
     Node(int value, int row, int column);
     Node(int value, std::pair<int,int> location);
+    
     int value() const;
     std::pair<int,int> location() const;
-    void addNextNode(Node node);
+    const std::vector<Node>& getNextNodes() const;
     
-    std::vector<Node>& getNextNodes();
+    void addNextNode(Node node);
     
     private:
     const int _value;

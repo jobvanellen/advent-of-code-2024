@@ -24,7 +24,7 @@ void Node::addNextNode(Node node)
     _nextNodes.push_back(node);
 }
 
-std::vector<Node>& Node::getNextNodes()
+const std::vector<Node>& Node::getNextNodes() const
 {
     return _nextNodes;
 }

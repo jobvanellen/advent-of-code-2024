@@ -33,22 +33,19 @@ void TrailFinder::addNextNodes(Node& node)
             int value = _map.at(nextLocation.first).at(nextLocation.second);
             if(value - node.value() == 1)
             {
-                node.addNextNode(Node(value, nextLocation));
+                Node nextNode = Node(value, nextLocation);
+                addNextNodes(nextNode);
+                node.addNextNode(nextNode);
             }
         }
-    }
-
-    for(auto& nextNode : node.getNextNodes())
-    {
-        addNextNodes(nextNode);
     }
 }
 
 
-std::vector<int> TrailFinder::getTrailheadScores()
+std::vector<int> TrailFinder::getTrailheadScores() const 
 {
     std::vector<int> scores;
-    for(auto& trailhead : _trailheads)
+    for(const auto& trailhead : _trailheads)
     {
         std::set<std::pair<int,int>> peakLocations;
         peakLocations.merge(findReachablePeaks(trailhead));
@@ -58,7 +55,7 @@ std::vector<int> TrailFinder::getTrailheadScores()
     return scores;
 }
 
-std::set<std::pair<int,int>> TrailFinder::findReachablePeaks(Node& node)
+std::set<std::pair<int,int>> TrailFinder::findReachablePeaks(const Node& node) const
 {
     std::set<std::pair<int,int>> peakLocations;
 
@@ -68,14 +65,14 @@ std::set<std::pair<int,int>> TrailFinder::findReachablePeaks(Node& node)
         return peakLocations;
     }
 
-    for(auto& node : node.getNextNodes())
+    for(const auto& node : node.getNextNodes())
     {
         peakLocations.merge(findReachablePeaks(node));
     }
     return peakLocations;
 }
 
-std::vector<int> TrailFinder::getTrailheadRatings()
+std::vector<int> TrailFinder::getTrailheadRatings() const
 {
     std::vector<int> ratings;
     for(auto& trailhead : _trailheads)
@@ -87,7 +84,7 @@ std::vector<int> TrailFinder::getTrailheadRatings()
     return ratings;
 }
 
-int TrailFinder::countPaths(Node& node)
+int TrailFinder::countPaths(const Node& node) const
 {
     if(node.value() == 9)
     {
@@ -100,14 +97,14 @@ int TrailFinder::countPaths(Node& node)
     
     int paths = node.getNextNodes().size() - 1;
 
-    for(auto& nextNode : node.getNextNodes())
+    for(const auto& nextNode : node.getNextNodes())
     {
         paths += countPaths(nextNode);
     }
     return paths;
 }
 
-bool TrailFinder::withinBounds(std::pair<int,int> location)
+bool TrailFinder::withinBounds(const std::pair<int,int> location) const
 {
     return location.first >= 0 &&
            location.first < _map.size() &&
