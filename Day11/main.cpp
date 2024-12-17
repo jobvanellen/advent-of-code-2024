@@ -53,7 +53,15 @@ void printStones(const std::list<unsigned long int>& stones)
     std::cout << std::endl;
 }
 
-
+std::list<int> splitList(std::list<int>& lst1)
+{
+    std::list<int> lst2;
+    lst2.splice( lst2.begin(), 
+                 lst1, 
+                 lst1.begin(), 
+                 std::next( lst1.begin(), lst1.size() / 2 ) );
+    return lst2;
+}
 
 int main()
 {
@@ -70,8 +78,6 @@ int main()
     std::list<unsigned long int> stones2;
 
     std::cout << stones.size() << std::endl;
-
-
 
     return 0;
 }
