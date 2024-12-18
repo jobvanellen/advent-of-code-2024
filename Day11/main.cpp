@@ -19,26 +19,24 @@ unsigned long int splitStone(unsigned long int& value)
     return stone1;
 }
 
-std::map<unsigned long int, unsigned long int> applyRule(const std::map<unsigned long int, unsigned long int>& stones, std::map<unsigned long int, unsigned long int>::iterator stoneType) 
+std::map<unsigned long int, unsigned long int> applyRule(const std::map<unsigned long int, unsigned long int>& stones, 
+                                                        std::map<unsigned long int, unsigned long int>& newMap, 
+                                                        std::map<unsigned long int, unsigned long int>::iterator stoneType) 
 {
     unsigned long int key = stoneType->first;
     unsigned long int amount = stoneType->second;
-    auto newMap = stones;
     if(key == 0)
     {  
-        newMap[key] -= amount;
         newMap[1] += amount;
     }
     else if(twoDigits(key))
     {
-        newMap[key] -= amount;
         auto newKey = splitStone(key);
         newMap[key] += amount;
         newMap[newKey] += amount;
     }
     else
     {
-        newMap[key] -= amount;
         newMap[key*2024] += amount;
     }
     return newMap;
@@ -49,7 +47,7 @@ void blink(std::map<unsigned long int, unsigned long int>& stones)
     std::map<unsigned long int, unsigned long int> newMap;
     for(auto stone = stones.begin(); stone != stones.end(); stone++)
     {
-        newMap = applyRule(stones, stone);
+        applyRule(stones, newMap, stone);
     }
     stones = newMap;
 }
@@ -63,22 +61,30 @@ void printStones(const std::map<unsigned long int, unsigned long int>& stones)
     std::cout << std::endl;
 }
 
-int main()
+std::map<unsigned long int, unsigned long int> createStoneMap()
 {
     std::vector<unsigned long int> stoneVector;
     std::map<unsigned long int, unsigned long int> stones;
-    FileParser::parseFile("example_stones.txt", stoneVector);    
-    // FileParser::parseFile("stones.txt", stoneVector);
+    // FileParser::parseFile("example_stones.txt", stoneVector);    
+    FileParser::parseFile("stones.txt", stoneVector);
 
     for(auto i : stoneVector)
     {
         stones[i] += 1;
     }  
 
-    for(int i = 0; i < 6; i++)
+    return stones;
+}
+
+int main()
+{
+    std::map<unsigned long int, unsigned long int> stones = createStoneMap();
+    const int blinkTimes = 25;
+
+    for(int i = 0; i < blinkTimes; i++)
     {
         blink(stones);
-        printStones(stones);
+        // printStones(stones);
     }
 
     unsigned long int count = std::accumulate(stones.begin(), stones.end(), 0, [](const unsigned long int previous, const auto& element)
