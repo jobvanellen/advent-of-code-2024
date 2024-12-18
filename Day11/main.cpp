@@ -13,8 +13,8 @@ bool twoDigits(unsigned long int value)
 unsigned long int splitStone(unsigned long int& value)
 {
     auto s = std::to_string(value);
-    int stone1 = std::stoi(s.substr(0, s.size()/2));
-    int stone2 = std::stoi(s.substr(s.size()/2, s.size()));
+    unsigned long int stone1 = std::stoi(s.substr(0, s.size()/2));
+    unsigned long int stone2 = std::stoi(s.substr(s.size()/2, s.size()));
     value = stone2;
     return stone1;
 }
@@ -45,29 +45,28 @@ std::map<unsigned long int, unsigned long int> applyRule(const std::map<unsigned
 void blink(std::map<unsigned long int, unsigned long int>& stones)
 {
     std::map<unsigned long int, unsigned long int> newMap;
-    for(auto stone = stones.begin(); stone != stones.end(); stone++)
+    for(auto stonetype = stones.begin(); stonetype != stones.end(); stonetype++)
     {
-        applyRule(stones, newMap, stone);
+        applyRule(stones, newMap, stonetype);
     }
     stones = newMap;
 }
 
 void printStones(const std::map<unsigned long int, unsigned long int>& stones)
 {
-    for(const auto& stone : stones)
+    for(const auto& stonetype : stones)
     {
-        std::cout << stone.first << "," << stone.second << "|";
+        std::cout << stonetype.first << "," << stonetype.second << "|";
     }
     std::cout << std::endl;
 }
 
-std::map<unsigned long int, unsigned long int> createStoneMap()
+std::map<unsigned long int, unsigned long int> createStoneMap(const std::string& file)
 {
     std::vector<unsigned long int> stoneVector;
-    std::map<unsigned long int, unsigned long int> stones;
-    // FileParser::parseFile("example_stones.txt", stoneVector);    
-    FileParser::parseFile("stones.txt", stoneVector);
+    FileParser::parseFile(file, stoneVector);
 
+    std::map<unsigned long int, unsigned long int> stones;   
     for(auto i : stoneVector)
     {
         stones[i] += 1;
@@ -78,8 +77,11 @@ std::map<unsigned long int, unsigned long int> createStoneMap()
 
 int main()
 {
-    std::map<unsigned long int, unsigned long int> stones = createStoneMap();
-    const int blinkTimes = 25;
+    // std::string file = "example_stones.txt";
+    std::string file = "stones.txt";
+    std::map<unsigned long int, unsigned long int> stones = createStoneMap(file);
+
+    const int blinkTimes = 75;
 
     for(int i = 0; i < blinkTimes; i++)
     {
@@ -87,9 +89,13 @@ int main()
         // printStones(stones);
     }
 
-    unsigned long int count = std::accumulate(stones.begin(), stones.end(), 0, [](const unsigned long int previous, const auto& element)
-                { return previous + element.second; });
+    unsigned long int count = 0;
+    for(const auto& stonetype : stones)
+    {
+        count += stonetype.second;
+    }
     std::cout << count << std::endl;
+
 
     return 0;
 }
