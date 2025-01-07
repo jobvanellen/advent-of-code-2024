@@ -16,4 +16,5 @@ class FencePriceCalculator
     const std::vector<std::vector<char>>& _map;
     std::set<std::pair<int,int>> _processedPlots;
     int _regionPerimeter = 0;
+    int _regionCorners = 0;
 };

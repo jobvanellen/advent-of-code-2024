@@ -30,10 +30,9 @@ int FencePriceCalculator::calculateRegionPrice(int startRow, int startColumn)
     std::set<std::pair<int,int>> regionPlots;
 
     _regionPerimeter = 0;
+    _regionCorners = 0;
 
     addAdjacentPlots(startRow, startColumn, regionPlots);
-    
-    const int regionSize = regionPlots.size();
 
     // std::cout << "Region size: " << regionSize << std::endl;
     // std::cout << "Region perimeter: " << _regionPerimeter << std::endl;
@@ -44,7 +43,8 @@ int FencePriceCalculator::calculateRegionPrice(int startRow, int startColumn)
         _processedPlots.insert(plot);
     }
 
-    return regionPlots.size() * _regionPerimeter;
+    // return regionPlots.size() * _regionPerimeter;
+    return regionPlots.size() * _regionCorners;
 }
 
 void FencePriceCalculator::addAdjacentPlots(int row, int column, std::set<std::pair<int,int>>& plots)
@@ -55,7 +55,9 @@ void FencePriceCalculator::addAdjacentPlots(int row, int column, std::set<std::p
     }
 
     const char type = _map.at(row).at(column);
+    //                                                  up, down, left, right
     std::vector<std::pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    std::vector<bool> edges;
 
     for (const auto& direction : directions)
     {
@@ -67,15 +69,71 @@ void FencePriceCalculator::addAdjacentPlots(int row, int column, std::set<std::p
             if (_map.at(newRow).at(newColumn) == type) 
             {
                 addAdjacentPlots(newRow, newColumn, plots);
+                edges.push_back(false);
             }
             else
             {
+                edges.push_back(true);
                 _regionPerimeter++;
             }
         }
         else
         {
+            edges.push_back(true);
             _regionPerimeter++;
+        }
+    }
+
+    if(edges.at(0) && edges.at(2))
+    {
+        _regionCorners++;
+    }
+    if(edges.at(0) && edges.at(3))
+    {
+        _regionCorners++;
+    }
+    if(edges.at(1) && edges.at(2))
+    {
+        _regionCorners++;
+    }
+    if(edges.at(1) && edges.at(3))
+    {
+        _regionCorners++;
+    }
+
+    if(!edges.at(0) && !edges.at(2))
+    {
+        std::pair<int,int> diagonal = (std::make_pair(row-1,column-1));
+        if(_map.at(diagonal.first).at(diagonal.second) != type)
+        {
+            _regionCorners++;
+        }
+    }
+
+    if(!edges.at(0) && !edges.at(3))
+    {
+        std::pair<int,int> diagonal = (std::make_pair(row-1,column+1));
+        if(_map.at(diagonal.first).at(diagonal.second) != type)
+        {
+            _regionCorners++;
+        }
+    }
+
+    if(!edges.at(1) && !edges.at(2))
+    {
+        std::pair<int,int> diagonal = (std::make_pair(row+1,column-1));
+        if(_map.at(diagonal.first).at(diagonal.second) != type)
+        {
+            _regionCorners++;
+        }
+    }
+
+    if(!edges.at(1) && !edges.at(3))
+    {
+        std::pair<int,int> diagonal = (std::make_pair(row+1,column+1));
+        if(_map.at(diagonal.first).at(diagonal.second) != type)
+        {
+            _regionCorners++;
         }
     }
 }
