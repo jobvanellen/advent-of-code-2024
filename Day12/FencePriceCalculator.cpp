@@ -9,7 +9,6 @@ FencePriceCalculator::FencePriceCalculator(const std::vector<std::vector<char>>&
 
 int FencePriceCalculator::calculateFencingPrice()
 {
-    std::vector<std::vector<char>> _walkedMap = _map;
     int totalPrice = 0;
     for(int i = 0; i < _map.size(); i++)
     {
@@ -84,6 +83,12 @@ void FencePriceCalculator::addAdjacentPlots(int row, int column, std::set<std::p
         }
     }
 
+    findOuterCorners(edges);
+    findInnerCorners(edges, row, column, type);
+}
+
+void FencePriceCalculator::findOuterCorners(const std::vector<bool>& edges)
+{
     if(edges.at(0) && edges.at(2))
     {
         _regionCorners++;
@@ -100,7 +105,10 @@ void FencePriceCalculator::addAdjacentPlots(int row, int column, std::set<std::p
     {
         _regionCorners++;
     }
+}
 
+void FencePriceCalculator::findInnerCorners(const std::vector<bool>& edges, int row, int column, char type)
+{
     if(!edges.at(0) && !edges.at(2))
     {
         std::pair<int,int> diagonal = (std::make_pair(row-1,column-1));
