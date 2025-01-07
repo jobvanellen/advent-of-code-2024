@@ -1,0 +1,83 @@
+#include "FencePriceCalculator.hpp"
+#include <iostream>
+#include <set>
+#include <algorithm>
+
+FencePriceCalculator::FencePriceCalculator(const std::vector<std::vector<char>>& map)
+: _map(map)
+{}
+
+int FencePriceCalculator::calculateFencingPrice()
+{
+    std::vector<std::vector<char>> _walkedMap = _map;
+    int totalPrice = 0;
+    for(int i = 0; i < _map.size(); i++)
+    {
+        for(int j = 0; j < _map.at(i).size(); j++)
+        {
+            if(std::find(_processedPlots.begin(), _processedPlots.end(), std::make_pair(i,j)) == _processedPlots.end())
+            {
+                totalPrice += calculateRegionPrice(i,j);
+            }
+        }
+    }
+
+    return totalPrice;
+}
+
+int FencePriceCalculator::calculateRegionPrice(int startRow, int startColumn)
+{
+    std::set<std::pair<int,int>> regionPlots;
+
+    _regionPerimeter = 0;
+
+    addAdjacentPlots(startRow, startColumn, regionPlots);
+    
+    const int regionSize = regionPlots.size();
+
+    // std::cout << "Region size: " << regionSize << std::endl;
+    // std::cout << "Region perimeter: " << _regionPerimeter << std::endl;
+    // std::cout << "Region price: " << regionSize * _regionPerimeter << std::endl;
+
+    for(const auto& plot : regionPlots)
+    {
+        _processedPlots.insert(plot);
+    }
+
+    return regionPlots.size() * _regionPerimeter;
+}
+
+void FencePriceCalculator::addAdjacentPlots(int row, int column, std::set<std::pair<int,int>>& plots)
+{
+    if(!plots.emplace(row,column).second)
+    {
+        return;
+    }
+
+    const char type = _map.at(row).at(column);
+    std::vector<std::pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    for (const auto& direction : directions)
+    {
+        int newRow = row + direction.first;
+        int newColumn = column + direction.second;
+
+        if (newRow >= 0 && newRow < _map.size() && newColumn >= 0 && newColumn < _map.at(newRow).size())
+        {
+            if (_map.at(newRow).at(newColumn) == type) 
+            {
+                addAdjacentPlots(newRow, newColumn, plots);
+            }
+            else
+            {
+                _regionPerimeter++;
+            }
+        }
+        else
+        {
+            _regionPerimeter++;
+        }
+    }
+}
+
+
