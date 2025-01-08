@@ -13,16 +13,16 @@ void FileParser::parseMachineInfo(const std::string& file, std::vector<Machine>&
     while (std::getline(stream, line))
     {
         Machine machine;
-        sscanf(line.c_str(), "Button A: X+%d, Y+%d", &machine.aButton.x, &machine.aButton.y);
+        sscanf(line.c_str(), "Button A: X+%llu, Y+%llu", &machine.aButton.x, &machine.aButton.y);
         std::getline(stream, line);
-        sscanf(line.c_str(), "Button B: X+%d, Y+%d", &machine.bButton.x, &machine.bButton.y);
+        sscanf(line.c_str(), "Button B: X+%llu, Y+%llu", &machine.bButton.x, &machine.bButton.y);
         std::getline(stream, line);
-        sscanf(line.c_str(), "Prize: X=%d, Y=%d", &machine.prizeLocation.first, &machine.prizeLocation.second);
+        sscanf(line.c_str(), "Prize: X=%llu, Y=%llu", &machine.prizeLocation.first, &machine.prizeLocation.second);
         machines.push_back(machine);
         std::getline(stream, line); // Skip the empty line
     }
 
-    printMachines(machines);
+    // printMachines(machines);
 }
 
 void FileParser::printMachines(const std::vector<Machine>& machines)

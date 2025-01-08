@@ -4,9 +4,9 @@
 
 struct Button
 {
-    int x;
-    int y;
-    int cost;
+    long long int x;
+    long long int y;
+    long long int cost;
 };
 
 struct Machine
@@ -14,5 +14,5 @@ struct Machine
     Machine(){ aButton.cost = 3; bButton.cost = 1; }
     Button aButton;
     Button bButton;
-    std::pair<int,int> prizeLocation;
+    std::pair<long long int,long long int> prizeLocation;
 };
