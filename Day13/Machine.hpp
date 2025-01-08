@@ -1,14 +1,18 @@
 #pragma once
 
-struct Coordinate
+#include <utility>
+
+struct Button
 {
     int x;
     int y;
+    int cost;
 };
 
 struct Machine
 {
-    Coordinate aButton;
-    Coordinate bButton;
-    Coordinate prizeLocation;
+    Machine(){ aButton.cost = 3; bButton.cost = 1; }
+    Button aButton;
+    Button bButton;
+    std::pair<int,int> prizeLocation;
 };

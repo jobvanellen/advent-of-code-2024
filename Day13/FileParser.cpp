@@ -17,7 +17,7 @@ void FileParser::parseMachineInfo(const std::string& file, std::vector<Machine>&
         std::getline(stream, line);
         sscanf(line.c_str(), "Button B: X+%d, Y+%d", &machine.bButton.x, &machine.bButton.y);
         std::getline(stream, line);
-        sscanf(line.c_str(), "Prize: X=%d, Y=%d", &machine.prizeLocation.x, &machine.prizeLocation.y);
+        sscanf(line.c_str(), "Prize: X=%d, Y=%d", &machine.prizeLocation.first, &machine.prizeLocation.second);
         machines.push_back(machine);
         std::getline(stream, line); // Skip the empty line
     }
@@ -31,7 +31,7 @@ void FileParser::printMachines(const std::vector<Machine>& machines)
     {
         std::cout << "Button A: X+" << machine.aButton.x << ", Y+" << machine.aButton.y << std::endl;
         std::cout << "Button B: X+" << machine.bButton.x << ", Y+" << machine.bButton.y << std::endl;
-        std::cout << "Prize: X=" << machine.prizeLocation.x << ", Y=" << machine.prizeLocation.y << std::endl;
+        std::cout << "Prize: X=" << machine.prizeLocation.first << ", Y=" << machine.prizeLocation.second << std::endl;
         std::cout << std::endl;
     }
 }
