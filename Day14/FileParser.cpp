@@ -17,7 +17,7 @@ void FileParser::parseRobotInfo(const std::string& file, std::vector<Robot>& rob
         robots.emplace_back(x, y, vx, vy, lx, ly);
     }
 
-    printRobots(robots);
+    // printRobots(robots);
 }
 
 void FileParser::printRobots(const std::vector<Robot>& robots)

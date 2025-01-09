@@ -2,6 +2,9 @@
 
 #include <array>
 #include <numeric>
+#include <algorithm>
+#include <set>
+
 
 int main()
 {
@@ -55,5 +58,41 @@ int main()
 
     int safetyFactor = quadrantScores.at(0) * quadrantScores.at(1) * quadrantScores.at(2) * quadrantScores.at(3);
     std::cout << "Safety factor: " << safetyFactor << std::endl;
+
+    robots.clear();
+    FileParser::parseRobotInfo("robots.txt", robots, 101, 103);
+    // print eacht cycle
+    int x = 499;
+    for(int i = 0; i < 100000; i++)
+    {   
+        // 2d char vector of spaces
+        std::vector<std::vector<char>> map(yLimit, std::vector<char>(xLimit, ' '));
+        for(auto& robot : robots)
+        {
+            map.at(robot.getY()).at(robot.getX()) = '#';
+            robot.move(1);
+        }
+
+        int uniquePositions = 0;
+        for(const auto& row: map)
+        {
+            uniquePositions += std::count(row.begin(), row.end(), '#');
+        }
+        // print map if unique size > x
+        if(uniquePositions > x)
+        {
+            for(const auto& row : map)
+            {
+                for(const auto& cell : row)
+                {
+                    std::cout << cell;
+                }
+                std::cout << std::endl;
+            }
+            // close cycle with line
+            std::cout << i << std::string(xLimit - 1, '-') << std::endl;
+        }
+    }
+
     return 0;
 }
