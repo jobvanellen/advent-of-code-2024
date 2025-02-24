@@ -13,7 +13,7 @@ std::pair<int,int> findRobot(const std::vector<std::vector<char>>& map)
         }
     }
 
-    return std::make_pair(-1,-1);    
+    return std::make_pair(-1,-1);
 }
 
 void moveObject(std::vector<std::vector<char>> &map, std::pair<int, int> &position, int newX, int newY, char symbol)
@@ -108,10 +108,8 @@ int main()
             break;
         default:
             break;
-        }
-        // robotPosition = findRobot(map);
-        // std::cout << "Robot moved to: " << robotPosition.first << " " << robotPosition.second << std::endl;
     }
+}
     
     FileParser::printMap(map);
 
